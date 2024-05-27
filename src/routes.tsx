@@ -1,20 +1,25 @@
-import { Suspense, lazy } from 'react';
-import MainLayout from './layouts/MainLayout';
+import {Suspense, lazy} from 'react';
+import type {RouteObject} from 'react-router';
+import LoadingScreen from './components/LoadingScreen';
+import MainLayout from './layout/MainLayout';
 import AuthGuard from './components/AuthGuard';
 import GuestGuard from './components/GuestGuard';
-import type { RouteObject } from 'react-router-dom';
-import LoadingScreen from './components/LoadingScreen';
 
-const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) => 
+const Loadable = (Component: any) => (props: JSX.IntrinsicAttributes) =>
     (
-        <Suspense fallback={<LoadingScreen />}>
+        <Suspense fallback={<LoadingScreen/>}>
             <Component {...props} />
         </Suspense>
     );
 
- const Login = Loadable(lazy(() => import('./pages/authentication/Login')));
+// *  AUTHENTICATION PAGES
+const Login = Loadable(lazy(() => import('./pages/authentication/Login')));
+const Register = Loadable(
+    lazy(() => import('./pages/authentication/Register'))
+);
+
 //  * HOME PAGE
-const Home = Loadable(lazy(() => import('./pages/home/Home') ));
+const Home = Loadable(lazy(() => import('./pages/home/Home')));
 
 const routes: RouteObject[] = [
     {
@@ -24,23 +29,32 @@ const routes: RouteObject[] = [
                 path: 'login',
                 element: (
                     <GuestGuard>
-                        <Login />
+                        <Login/>
                     </GuestGuard>
-                )
-            }
-        ]
+                ),
+            },
+            {
+                path: 'register',
+                element: (
+                    <GuestGuard>
+                        <Register/>{' '}
+                    </GuestGuard>
+                ),
+            },
+        ],
     },
+
     {
         path: '*',
-        element: <MainLayout />,
+        element: <MainLayout/>,
         children: [
             {
                 index: true,
                 element: (
                     <AuthGuard>
-                        <Home />
+                        <Home/>
                     </AuthGuard>
-                )
+                ),
             },
         ],
     },

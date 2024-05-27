@@ -9,9 +9,10 @@ import {
     Link,
     Typography,
 } from '@mui/material';
-import LoginJWT from '../../components/authentication/login';
 
-const Login: FC = () => {
+import RegisterJWT from '../../components/authentication/register';
+
+const Register: FC = () => {
     return (
         <Box
             sx={{
@@ -24,9 +25,9 @@ const Login: FC = () => {
             <Container maxWidth='sm' sx={{py: '80px'}}>
                 <Box
                     sx={{
+                        mb: 8,
                         display: 'flex',
                         justifyContent: 'center',
-                        mb: 8,
                     }}
                 ></Box>
                 <Card>
@@ -47,10 +48,10 @@ const Login: FC = () => {
                         >
                             <div>
                                 <Typography color='textPrimary' gutterBottom variant='h4'>
-                                    Log in
+                                    Register
                                 </Typography>
                                 <Typography color='textSecondary' variant='body2'>
-                                    Log in on the internal platform
+                                    Register on the internal platform
                                 </Typography>
                             </div>
                         </Box>
@@ -60,16 +61,16 @@ const Login: FC = () => {
                                 mt: 3,
                             }}
                         >
-                            <LoginJWT/>
+                            <RegisterJWT/>
                         </Box>
                         <Divider sx={{my: 3}}/>
                         <Link
                             color='textSecondary'
                             component={RouterLink}
-                            to='/authentication/register'
+                            to='/authentication/login'
                             variant='body2'
                         >
-                            Create new account
+                            Having an account
                         </Link>
                     </CardContent>
                 </Card>
@@ -78,4 +79,4 @@ const Login: FC = () => {
     );
 };
 
-export default Login;
+export default Register;

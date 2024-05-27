@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
-import type { FC } from 'react';
-import nProgress from 'nprogress';
-import { Box } from '@mui/material'
+import {useEffect} from 'react';
+import type {FC} from 'react';
+import NProgress from 'nprogress';
+import {Box} from '@mui/material';
 
 const LoadingScreen: FC = () => {
     useEffect(() => {
-        nProgress.start();
+        NProgress.start();
 
         return (): void => {
-            nProgress.done();
+            NProgress.done();
         };
     }, []);
 

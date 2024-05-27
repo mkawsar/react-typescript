@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import type {FC, ReactNode} from 'react';
+import {useState} from 'react';
+import {Navigate, useLocation} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import useAuth from '../hooks/useAuth';
-import type { FC, ReactNode } from 'react';
 import Login from '../pages/authentication/Login';
-import { Navigate, useLocation } from 'react-router-dom';
 
 interface AuthGuardProps {
     children: ReactNode;
-};
+}
 
 const AuthGuard: FC<AuthGuardProps> = (props) => {
-    const { children } = props;
+    const {children} = props;
     const auth = useAuth() as any;
     const location = useLocation();
     const [requestedLocation, setRequestedLocation] = useState<string | null>();
@@ -19,7 +19,8 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
         if (location.pathname !== requestedLocation) {
             setRequestedLocation(location.pathname);
         }
-        return <Login />;
+
+        return <Login/>;
     }
 
     // This is done so that in case the route changes by any chance through other
@@ -27,7 +28,7 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
     // requested route.
     if (requestedLocation && location.pathname !== requestedLocation) {
         setRequestedLocation(null);
-        return <Navigate to={requestedLocation} />;
+        return <Navigate to={requestedLocation}/>;
     }
 
     return <>{children}</>;
@@ -36,5 +37,5 @@ const AuthGuard: FC<AuthGuardProps> = (props) => {
 AuthGuard.propTypes = {
     children: PropTypes.node,
 };
-  
+
 export default AuthGuard;

@@ -1,45 +1,67 @@
 import type {FC} from 'react';
-import {Alert, Box, Button, FormHelperText, TextField} from '@mui/material';
-import useAuth from '../../hooks/useAuth';
-import useMounted from '../../hooks/useMounted';
 import * as Yup from 'yup';
 import {Formik} from 'formik';
+import {
+    Box,
+    Button,
+    Checkbox,
+    FormHelperText,
+    TextField,
+    Typography,
+    Link,
+} from '@mui/material';
+import useAuth from '../../hooks/useAuth';
+import useMounted from '../../hooks/useMounted';
 
-const LoginJWT: FC = (props) => {
+const RegisterJWT: FC = (props) => {
     const mounted = useMounted();
-    const {login} = useAuth() as any;
+    const {register} = useAuth() as any;
 
     return (
         <Formik
             initialValues={{
-                email: 'admin@example.com',
-                password: 'password',
+                email: '',
+                name: '',
+                password: '',
+                policy: false,
                 submit: null,
             }}
             validationSchema={Yup.object().shape({
                 email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                password: Yup.string().max(255).required('Password is required'),
+                name: Yup.string().max(255).required('Name is required'),
+                password: Yup.string().min(7).max(255).required('Password is required'),
+                policy: Yup.boolean().oneOf([true], 'This field must be checked'),
             })}
             onSubmit={async (values, {setErrors, setStatus, setSubmitting}): Promise<void> => {
                 try {
-                    await login(values.email, values.password);
+                    await register(values.email, values.name, values.password);
                     if (mounted.current) {
                         setStatus({success: true});
                         setSubmitting(false);
                     }
                 } catch (err: any) {
-                    if (mounted.current) {
-                        setStatus({success: false});
-                        setErrors({submit: err?.message});
-                        setSubmitting(false);
-                    }
+                    console.error(err);
+                    setStatus({success: false});
+                    setErrors({submit: err?.message});
+                    setSubmitting(false);
                 }
             }}
         >
             {({errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values,}): JSX.Element => (
                 <form noValidate onSubmit={handleSubmit} {...props}>
                     <TextField
-                        autoFocus
+                        error={Boolean(touched.name && errors.name)}
+                        fullWidth
+                        helperText={touched.name && errors.name}
+                        label='Name'
+                        margin='normal'
+                        name='name'
+                        onBlur={handleBlur}
+                        onChange={handleChange}
+                        value={values.name}
+                        variant='outlined'
+                    />
+                    <TextField
                         error={Boolean(touched.email && errors.email)}
                         fullWidth
                         helperText={touched.email && errors.email}
@@ -65,6 +87,30 @@ const LoginJWT: FC = (props) => {
                         value={values.password}
                         variant='outlined'
                     />
+                    <Box
+                        sx={{
+                            alignItems: 'center',
+                            display: 'flex',
+                            ml: -1,
+                            mt: 2,
+                        }}
+                    >
+                        <Checkbox
+                            checked={values.policy}
+                            color='primary'
+                            name='policy'
+                            onChange={handleChange}
+                        />
+                        <Typography color='textSecondary' variant='body2'>
+                            I have read the{' '}
+                            <Link color='primary' component='a' href='#'>
+                                Terms and Conditions
+                            </Link>
+                        </Typography>
+                    </Box>
+                    {Boolean(touched.policy && errors.policy) && (
+                        <FormHelperText error>{errors.policy}</FormHelperText>
+                    )}
                     {errors.submit && (
                         <Box sx={{mt: 3}}>
                             <FormHelperText error>{errors.submit}</FormHelperText>
@@ -79,15 +125,8 @@ const LoginJWT: FC = (props) => {
                             type='submit'
                             variant='contained'
                         >
-                            Log In
+                            Register
                         </Button>
-                    </Box>
-                    <Box sx={{mt: 2}}>
-                        <Alert severity='info'>
-                            <div>
-                                User <b>admin@example.com </b> and Password <b>password</b>
-                            </div>
-                        </Alert>
                     </Box>
                 </form>
             )}
@@ -95,4 +134,4 @@ const LoginJWT: FC = (props) => {
     );
 };
 
-export default LoginJWT;
+export default RegisterJWT;
