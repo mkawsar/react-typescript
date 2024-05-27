@@ -70,18 +70,18 @@ const LoginJWT: FC = (props) => {
                             <FormHelperText error>{errors.submit}</FormHelperText>
                         </Box>
                     )}
-                    <Box sx={{mt: 2}}>
-                        <Button
-                            color='primary'
-                            disabled={isSubmitting}
-                            fullWidth
-                            size='large'
-                            type='submit'
-                            variant='contained'
-                        >
-                            Log In
-                        </Button>
-                    </Box>
+                        <Box sx={{mt: 2}}>
+                            <Button
+                                color='primary'
+                                disabled={isSubmitting}
+                                fullWidth
+                                size='large'
+                                type='submit'
+                                variant='contained'
+                            >
+                                Log In
+                            </Button>
+                        </Box>
                     <Box sx={{mt: 2}}>
                         <Alert severity='info'>
                             <div>
