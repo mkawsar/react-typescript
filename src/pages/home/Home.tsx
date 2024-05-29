@@ -2,6 +2,11 @@ import type {FC} from 'react';
 import {Box, Button, Card, Container, CardContent} from '@mui/material';
 
 const Home: FC = (props) => {
+
+    const handleLogout = () => {
+        console.log('test');
+    }
+
     return (
         <Box
             sx={{
@@ -29,7 +34,7 @@ const Home: FC = (props) => {
                     >
                         <p>Hello world</p>
                         <Box sx={{mt: 2}}>
-                            <Button
+                            <Button onClick={handleLogout}
                                 color='primary'
                                 fullWidth
                                 size='large'
