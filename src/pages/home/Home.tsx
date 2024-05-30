@@ -1,10 +1,17 @@
 import type {FC} from 'react';
+import useAuth from '../../hooks/useAuth';
 import {Box, Button, Card, Container, CardContent} from '@mui/material';
 
 const Home: FC = (props) => {
 
-    const handleLogout = () => {
-        console.log('test');
+    const {logout} = useAuth() as any;
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+        } catch (err: any) {
+            console.log(err);
+        }
     }
 
     return (
